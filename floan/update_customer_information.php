@@ -142,8 +142,8 @@
 		<label for="phonenum">Phone:</label>
 		<input type="text" id="phonenum" name="phonenum" value="<?php echo $phonenum ?>">
 
-        <label for="lastupdate">Primary Income:</label>
-		<input type="date" id="lastupdate" name="lastupdate" value="<?php echo $lastupdate ?>">
+        <label for="lastupdate">Late Update Date:</label>
+		<input type="date" id="lastupdate" name="lastupdate" disabled value="<?php echo $lastupdate ?>">
 
 
 		<input type="submit" value="Submit">
