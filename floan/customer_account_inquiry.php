@@ -158,10 +158,9 @@
                 echo '<p class="result">Interest Rate: ' . $row['LASTNAME'] . '</p>';
                 echo '<p class="result">Principal Balance: ' . $row['FIRSTNAME'] .  '</p>';
                 echo '<p class="result">:Account Status: current  </p>';
-                echo '<p class="result">Loan Amount: ' . $row['customerssn'] . '</p>';
-                echo '<p class="result">Monthly Payment: ' . $row['LASTNAME'] . '</p>';
-                echo '<p class="result">: ' . $row['FIRSTNAME'] .  '</p>';
-                echo '<p class="result">Address: ' . $row['STREET'] . ' </p>';
+                echo '<p class="result">Loan Amount: ' . $row['LOANAMOUNT'] . '</p>';
+                echo '<p class="result">Monthly Payment: ' . $row['MONTHLYPAY'] . '</p>';
+                echo '<p class="result">Remaining Payments: ' . $row['REMAININGPAY'] .  '</p>';
 
             }
 
@@ -173,12 +172,13 @@
 
             echo '<h1 class="result"> Account Information </h1>';
             while ($row = oci_fetch_array($stmt2, OCI_ASSOC+OCI_RETURN_NULLS)) {
-                echo '<p class="result">Loan No: ' . $row['LOANNUM'] . '</p>';
-                echo '<p class="result">Interest Rate: ' . $row['INTERESTRATE'] .  '%</p>';
-                echo '<p class="result">Principal Balance: ' . $row['PRINCIPLEBAL'] .' </p>';
-                echo '<p class="result">Date of Last Payment: ' . $row['DATERECEIVED'] . ' </p>';
-                echo '<p class="result">Remaining Payments: ' . $row['REMANINGPAY'] . ' </p>';
-                echo '<p class="result">Monthly Payment/Amount Due: ' . $row['MONTHLYPAY'] . ' </p>';
+                echo '<p class="result">StmtNo: ' . $row['STMTNUM'] . '</p>';
+                echo '<p class="result">Date Due: ' . $row['DATEDUE'] .  '%</p>';
+                echo '<p class="result">Amount Billed: ' . $row['AMOUNTBILLED'] .' </p>';
+                echo '<p class="result">Date Received: ' . $row['DATERECEIVED'] . ' </p>';
+                echo '<p class="result">Amount Received: ' . $row['AMOUNTRECEIVED'] . ' </p>';
+                echo '<p class="result">Interest Paid: ' . $row['INTERESTPAID'] . ' </p>';
+                echo '<p class="result">Principal Applied: ' . $row['PRINCIPALAPPLIED'] . ' </p>';
             }
 
 
