@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$creditreport = $_POST['creditreport'];
 	$bankinfo = $_POST['bankinfo'];
 	$loanstatus = $_POST['loanstatus'];
-	$loanstatus = $_POST['underwriterid'];
+	$underwriterid = $_POST['underwriterid'];
 }
 
 // First INSERT statement for LOAN table
@@ -207,6 +207,9 @@ oci_execute($stmt2);
 
 		<label for="loanstatus">Loan Status:</label>
 		<input type="text" id="loanstatus" name="loanstatus">
+
+		<label for="underwriterid">Underwriter ID:</label>
+		<input type="number" id="underwriterid" name="underwriterid">
 
 
 
