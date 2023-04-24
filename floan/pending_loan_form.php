@@ -78,10 +78,10 @@
     <form method="post" action="search_loan.php">
         <label>Enter Loan Number:</label>
         <input type="number" name="id">
-        <input type="submit" value="Search">
+        <input type="submit" name="submit" value="Search">
     </form>
 
-    
+
 </body>
 
 </html>

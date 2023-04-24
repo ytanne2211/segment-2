@@ -11,9 +11,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $state = $_POST['state'];
     $zip = $_POST['zip'];
     $phonenum = $_POST['phonenum'];
-    $lastupdate = $_POST['lastupdate'];
+    $lastupdate = date('m/d/Y', strtotime($_POST['lastupdate']));
+
+
 
 }
+
+
 
 // Second INSERT statement for CUSTOMER table
 $sql2 = "UPDATE customer
@@ -24,9 +28,9 @@ $sql2 = "UPDATE customer
              state = :state,
              zip = :zip,
              phonenum = :phonenum,
-             lastupdate = :lastupdate
+             lastupdate = TO_DATE(:lastupdate, 'MM/DD/YYYY')
              WHERE customerssn = :customerssn";
-         
+
 $stmt2 = oci_parse($conn, $sql2);
 
 // Bind parameters for the second statement
@@ -44,5 +48,8 @@ oci_bind_by_name($stmt2, ':lastupdate', $lastupdate);
 // Execute the second statement
 oci_execute($stmt2);
 
+if (oci_num_rows($stmt2) > 0) {
+    echo '<p style="color: green;">Form submitted successfully!</p>';
+}
 
 ?>

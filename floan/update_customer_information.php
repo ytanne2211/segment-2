@@ -22,13 +22,7 @@
 			margin-bottom: 10px;
 			font-size: 18px;
 		}
-		input[type="number"] {
-			padding: 10px;
-			font-size: 16px;
-			border-radius: 5px;
-			border: 1px solid black;
-			margin-bottom: 20px;
-		}
+
 		input[type="submit"] {
 			padding: 10px 20px;
 			font-size: 18px;
@@ -80,7 +74,7 @@
 			$id = $_POST['id'];
 
 			// Prepare SQL query
-			$sql = "SELECT * from customer where customerssn = :d";
+			$sql = "SELECT * from customer where customerssn = :id";
 
             $stmt = oci_parse($conn, $sql);
 
@@ -104,22 +98,28 @@
                 $city = $row['CITY'];
                 $state = $row['STATE'];
                 $zip = $row['ZIP'];
+				$phonenum = $row['PHONENUM'];
+				$lastupdate = date("Y-m-d");
             }
 
+			oci_free_statement($stmt);
+			oci_close($conn);
 
-            // Free resources and close connection
-            oci_free_statement($stmt);
-            oci_close($conn);
+
+
         }
 
 	?>
-
+	<?php // Check if form has been submitted
+    if (isset($_POST['submit'])) {
+     ?>
     <body>
 	<h1>New Loan Application Form</h1>
 	<form action="customer_update.php" method="post">
 
-		<label for="customerssn">Customer SSN:</label>
-		<input type="number" id="customerssn" name="customerssn" disabled value="<?php echo $customerssn ?>">
+		<label hidden for="customerssn">Customer SSN:</label>
+		<input type="number" id="customerssn" name="customerssn" hidden value="<?php echo $customerssn ?>">
+		<p>Customer SSN: <span><?php echo $customerssn ?></span></p>
 
 		<label for="lastname">Last Name:</label>
 		<input type="text" id="lastname" name="lastname" value="<?php echo $lastname ?>">
@@ -137,16 +137,20 @@
 		<input type="text" id="state" name="state" value="<?php echo $state ?>">
 
 		<label for="zip">Zip:</label>
-		<input type="text" id="zip" name="zip" value="<?php echo $zip ?>">
+		<input type="number" id="zip" name="zip" value="<?php echo $zip ?>">
 
 		<label for="phonenum">Phone:</label>
-		<input type="text" id="phonenum" name="phonenum" value="<?php echo $phonenum ?>">
+		<input type="tel" id="phonenum" name="phonenum" value="<?php echo $phonenum ?>">
 
-        <label for="lastupdate">Late Update Date:</label>
-		<input type="date" id="lastupdate" name="lastupdate" disabled value="<?php echo $lastupdate ?>">
+        <label hidden for="lastupdate">Late Update Date:</label>
+		<input type="date" id="lastupdate" name="lastupdate" hidden value="<?php echo $lastupdate ?>">
+
+		<p>Last Update Date: <span><?php echo $lastupdate ?></span></p>
 
 
 		<input type="submit" value="Submit">
 	</form>
+
+	<?php } ?>
 </body>
 </html>

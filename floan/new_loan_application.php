@@ -17,62 +17,96 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$primaryincome = $_POST['primaryincome'];
 	$secondincome = $_POST['secondincome'];
 	$loannum = $_POST['loannum'];
-	$applicandate = $_POST['applicandate'];
 	$loanamount = $_POST['loanamount'];
 	$loanterm = $_POST['loanterm'];
 	$monthlypay = $_POST['monthlypay'];
 	$interestrate = $_POST['interestrate'];
-	$W2 = $_POST['W2'];
-	$taxreturn = $_POST['taxreturn'];
-	$creditreport = $_POST['creditreport'];
-	$bankinfo = $_POST['bankinfo'];
+	if (isset($_POST['W2'])) {
+		$W2 = $_POST['W2'];
+	} else {
+		$W2 = 'N';
+	}
+
+	if (isset($_POST['taxreturn'])) {
+		$taxreturn = $_POST['taxreturn'];
+	} else {
+		$taxreturn = 'N';
+	}
+
+	if (isset($_POST['creditreport'])) {
+		$creditreport = $_POST['creditreport'];
+	} else {
+		$creditreport = 'N';
+	}
+
+	if (isset($_POST['bankinfo'])) {
+		$bankinfo = $_POST['bankinfo'];
+	} else {
+		$bankinfo = 'N';
+	}
+
 	$loanstatus = $_POST['loanstatus'];
 	$underwriterid = $_POST['underwriterid'];
+
+	$applicandate = $_POST['applicandate'];
+	$applicandate = date('d-M-Y', strtotime($applicandate)); // convert to expected date format
+
+
+
+	$sql1 = "INSERT INTO LOAN (loanofficerid, customerssn, loannum, applicandate, loanamount, loanterm, monthlypay, interestrate, W2, taxreturn, creditreport, bankinfo, loanstatus, underwriterid)
+	VALUES (:loanofficerid, :customerssn, :loannum, to_date(:applicandate, 'dd-Mon-yyyy'), :loanamount, :loanterm, :monthlypay, :interestrate, :W2, :taxreturn, :creditreport, :bankinfo, :loanstatus, :underwriterid)";
+	$stmt1 = oci_parse($conn, $sql1);
+
+	// Bind parameters for the first statement
+	oci_bind_by_name($stmt1, ':loanofficerid', $loanofficerid);
+	oci_bind_by_name($stmt1, ':customerssn', $customerssn);
+	oci_bind_by_name($stmt1, ':loannum', $loannum);
+	oci_bind_by_name($stmt1, ':applicandate', $applicandate);
+	oci_bind_by_name($stmt1, ':loanamount', $loanamount);
+	oci_bind_by_name($stmt1, ':loanterm', $loanterm);
+	oci_bind_by_name($stmt1, ':monthlypay', $monthlypay);
+	oci_bind_by_name($stmt1, ':interestrate', $interestrate);
+	oci_bind_by_name($stmt1, ':W2', $W2);
+	oci_bind_by_name($stmt1, ':taxreturn', $taxreturn);
+	oci_bind_by_name($stmt1, ':creditreport', $creditreport);
+	oci_bind_by_name($stmt1, ':bankinfo', $bankinfo);
+	oci_bind_by_name($stmt1, ':loanstatus', $loanstatus);
+	oci_bind_by_name($stmt1, ':underwriterid', $underwriterid);
+
+	// Execute the first statement
+	oci_execute($stmt1);
+
+	// Get the number of rows affected by the first statement
+	$num_rows1 = oci_num_rows($stmt1);
+
+	// Second INSERT statement for CUSTOMER table
+	$sql2 = "INSERT INTO CUSTOMER (customerssn, lastname, firstname, street, city, state, zip, phonenum, primaryincome, secondincome)
+	VALUES (:customerssn, :lastname, :firstname, :street, :city, :state, :zip, :phonenum, :primaryincome, :secondincome)";
+	$stmt2 = oci_parse($conn, $sql2);
+
+	// Bind parameters for the second statement
+	oci_bind_by_name($stmt2, ':customerssn', $customerssn);
+	oci_bind_by_name($stmt2, ':lastname', $lastname);
+	oci_bind_by_name($stmt2, ':firstname', $firstname);
+	oci_bind_by_name($stmt2, ':street', $street);
+	oci_bind_by_name($stmt2, ':city', $city);
+	oci_bind_by_name($stmt2, ':state', $state);
+	oci_bind_by_name($stmt2, ':zip', $zip);
+	oci_bind_by_name($stmt2, ':phonenum', $phonenum);
+	oci_bind_by_name($stmt2, ':primaryincome', $primaryincome);
+	oci_bind_by_name($stmt2, ':secondincome', $secondincome);
+
+	// Execute the second statement
+	oci_execute($stmt2);
+
+	// Get the number of rows affected by the second statement
+	$num_rows2 = oci_num_rows($stmt2);
+
+	if (oci_num_rows($stmt1) > 0 && oci_num_rows($stmt2) > 0) {
+		echo '<p style="color: green;">Form submitted successfully!</p>';
+	}
 }
 
-// First INSERT statement for LOAN table
-$sql1 = "INSERT INTO LOAN (loanofficerid, customerssn, loannum, applicandate, loanamount, loanterm, monthlypay, interestrate, W2, taxreturn, creditreport, bankinfo, loanstatus, underwriterid)
-VALUES (:loanofficerid, :customerssn, :loannum, :applicandate, :loanamount, :loanterm, :monthlypay, :interestrate, :W2, :taxreturn, :creditreport, :bankinfo, :loanstatus, :underwriterid)";
-$stmt1 = oci_parse($conn, $sql1);
-
-// Bind parameters for the first statement
-oci_bind_by_name($stmt1, ':loanofficerid', $loanofficerid);
-oci_bind_by_name($stmt1, ':customerssn', $customerssn);
-oci_bind_by_name($stmt1, ':loannum', $loannum);
-oci_bind_by_name($stmt1, ':applicandate', $applicandate);
-oci_bind_by_name($stmt1, ':loanamount', $loanamount);
-oci_bind_by_name($stmt1, ':loanterm', $loanterm);
-oci_bind_by_name($stmt1, ':monthlypay', $monthlypay);
-oci_bind_by_name($stmt1, ':interestrate', $interestrate);
-oci_bind_by_name($stmt1, ':W2', $W2);
-oci_bind_by_name($stmt1, ':taxreturn', $taxreturn);
-oci_bind_by_name($stmt1, ':creditreport', $creditreport);
-oci_bind_by_name($stmt1, ':bankinfo', $bankinfo);
-oci_bind_by_name($stmt1, ':loanstatus', $loanstatus);
-oci_bind_by_name($stmt1, ':underwriterid', $underwriterid);
-
-// Execute the first statement
-oci_execute($stmt1);
-
-// Second INSERT statement for CUSTOMER table
-$sql2 = "INSERT INTO CUSTOMER (customerssn, lastname, firstname, street, city, state, zip, phonenum, primaryincome, secondincome)
-VALUES (:customerssn, :lastname, :firstname, :street, :city, :state, :zip, :phonenum, :primaryincome, :secondincome)";
-$stmt2 = oci_parse($conn, $sql2);
-
-// Bind parameters for the second statement
-oci_bind_by_name($stmt2, ':customerssn', $customerssn);
-oci_bind_by_name($stmt2, ':lastname', $lastname);
-oci_bind_by_name($stmt2, ':firstname', $firstname);
-oci_bind_by_name($stmt2, ':street', $street);
-oci_bind_by_name($stmt2, ':city', $city);
-oci_bind_by_name($stmt2, ':state', $state);
-oci_bind_by_name($stmt2, ':zip', $zip);
-oci_bind_by_name($stmt2, ':phonenum', $phonenum);
-oci_bind_by_name($stmt2, ':primaryincome', $primaryincome);
-oci_bind_by_name($stmt2, ':secondincome', $secondincome);
-
-// Execute the second statement
-oci_execute($stmt2);
 
 ?>
 <!DOCTYPE html>

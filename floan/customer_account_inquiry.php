@@ -3,96 +3,100 @@
 <head>
 	<title>Search by SSN</title>
     	<style>
-		    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-    }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
 
-    h1 {
-        margin: 0 auto;
-        font-size: 28px;
-        font-weight: bold;
-        text-align: center;
-    }
+        h1 {
+            margin: 40px auto;
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+        }
 
-    form {
-        margin: 20px auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        max-width: 500px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
+        h2{
+            margin: 40px auto;
+            text-align:center;
+        }
 
-    label {
-        margin-bottom: 10px;
-        font-size: 18px;
-        font-weight: bold;
-        text-align: center;
-    }
+        form {
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
 
-    input[type="number"] {
-        padding: 10px;
-        font-size: 16px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        margin-bottom: 20px;
-        width: 100%;
-    }
+        label {
+            margin-bottom: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
 
-    input[type="submit"] {
-        padding: 10px 20px;
-        font-size: 18px;
-        border-radius: 5px;
-        border: none;
-        background-color: #007bff;
-        color: white;
-        cursor: pointer;
-        width: 100%;
-        transition: all 0.3s ease-in-out;
-    }
+        input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            width: 100%;
+        }
 
-    input[type="submit"]:hover {
-        background-color: #0062cc;
-    }
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease-in-out;
+        }
 
-    .result {
-        margin: 20px auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        max-width: 500px;
-    }
+        input[type="submit"]:hover {
+            background-color: #0062cc;
+        }
 
-    .result h2 {
-        font-size: 24px;
-        margin: 0 0 10px;
-        text-align: center;
-        font-weight: bold;
-    }
+        .result {
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            max-width: 500px;
+        }
 
-    .result p {
-        font-size: 18px;
-        margin-bottom: 10px;
-        line-height: 1.5;
-    }
+        .result h2 {
+            font-size: 24px;
+            margin: 0 0 10px;
+            text-align: center;
+            font-weight: bold;
+        }
 
-    .result span {
-        text-decoration: underline;
-        font-weight: bold;
-    }
+        .result p {
+            font-size: 18px;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
 
+        .result span {
+            text-decoration: underline;
+            font-weight: bold;
+        }
 
 	</style>
 </head>
 <body>
-	<h1>Search Statement</h1>
+	<h1>Customer Account Inquiry</h1>
 	<form method="post" action="">
-		<label>Enter Statement ID:</label>
+		<label>Enter SSN:</label>
 		<input type="number" name="id">
 		<input type="submit" name="submit" value="Search">
 	</form>
@@ -106,15 +110,15 @@
 			// Get user input
 			$id = $_POST['id'];
 
-            $sql1 = "select * from customer c 
-            join loan l on c.customerssn = CAST(REPLACE(l.customerssn, '-', '') AS NUMBER) 
+            $sql1 = "select * from customer c
+            join loan l on c.customerssn = CAST(REPLACE(l.customerssn, '-', '') AS NUMBER)
             where c.customerssn = :id";
 
 
 
-            $sql2 = "select b.* from billingstatement
+            $sql2 = "select b.* from billingstatement b
                     join loan l on l.loannum = b.loannum
-                    join customer on c.customerssn = CAST(REPLACE(l.customerssn, '-', '') AS NUMBER)
+                    join customer c on c.customerssn = CAST(REPLACE(l.customerssn, '-', '') AS NUMBER)
          where c.customerssn = :id";
 
 
@@ -139,11 +143,9 @@
                 trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
             }
 
-            echo '<h1 class="result"> Monthly Statement </h1>';
-
             while ($row = oci_fetch_array($stmt1, OCI_ASSOC+OCI_RETURN_NULLS)) {
-                echo '<h1 class="result> Customer Account Inquiry </h1>';
-                echo '<p class="result">Customer SSN: ' . $row['customerssn'] . '</p>';
+                echo '<h2> Customer Account Inquiry </h1>';
+                echo '<p class="result">Customer SSN: ' . $row['CUSTOMERSSN'] . '</p>';
                 echo '<p class="result">Last Name: ' . $row['LASTNAME'] . '</p>';
                 echo '<p class="result">first  Name: ' . $row['FIRSTNAME'] .  '</p>';
                 echo '<p class="result">Address: ' . $row['STREET'] . ' </p>';
@@ -153,14 +155,14 @@
                 echo '<p class="result">Primary Income: ' . $row['PRIMARYINCOME'] . ' </p>';
                 echo '<p class="result">Secondary Income: ' . $row['SECONDINCOME'] . ' </p>';
 
-                echo '<h1 class="result> Loan Summary </h1>';
-                echo '<p class="result">Loan Term: ' . $row['customerssn'] . '</p>';
-                echo '<p class="result">Interest Rate: ' . $row['LASTNAME'] . '</p>';
-                echo '<p class="result">Principal Balance: ' . $row['FIRSTNAME'] .  '</p>';
-                echo '<p class="result">:Account Status: current  </p>';
+                echo '<h2> Loan Summary </h1>';
+                echo '<p class="result">Loan Term: ' . $row['LOANTERM'] . '</p>';
+                echo '<p class="result">Interest Rate: ' . $row['INTERESTRATE'] . '</p>';
+                echo '<p class="result">Principal Balance: ' . $row['PRINCIPLEBAL'] .  '</p>';
+                echo '<p class="result">Account Status: current  </p>';
                 echo '<p class="result">Loan Amount: ' . $row['LOANAMOUNT'] . '</p>';
                 echo '<p class="result">Monthly Payment: ' . $row['MONTHLYPAY'] . '</p>';
-                echo '<p class="result">Remaining Payments: ' . $row['REMAININGPAY'] .  '</p>';
+                echo '<p class="result">Remaining Payments: ' . $row['REMANINGPAY'] .  '</p>';
 
             }
 
@@ -170,10 +172,10 @@
                 trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
             }
 
-            echo '<h1 class="result"> Account Information </h1>';
+            echo '<h2> Account Information </h1>';
             while ($row = oci_fetch_array($stmt2, OCI_ASSOC+OCI_RETURN_NULLS)) {
                 echo '<p class="result">StmtNo: ' . $row['STMTNUM'] . '</p>';
-                echo '<p class="result">Date Due: ' . $row['DATEDUE'] .  '%</p>';
+                echo '<p class="result">Date Due: ' . $row['DATEDUE'] .  '</p>';
                 echo '<p class="result">Amount Billed: ' . $row['AMOUNTBILLED'] .' </p>';
                 echo '<p class="result">Date Received: ' . $row['DATERECEIVED'] . ' </p>';
                 echo '<p class="result">Amount Received: ' . $row['AMOUNTRECEIVED'] . ' </p>';
